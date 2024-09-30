@@ -1,0 +1,42 @@
+﻿@page "/"
+@using ToDoListAPP.Models
+
+<h3>To-Do List</h3>
+
+<div>
+    <input @bind="newTodoDescription" placeholder="Enter a new to-do item" />
+    <button @onclick="AddTodo">Add</button>
+</div>
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            <input type="checkbox" @bind="todo.IsCompleted" />
+            <span style="@(todo.IsCompleted ? "text-decoration: line-through;" : "")">
+                @todo.Description
+            </span>
+            <button @onclick="() => RemoveTodo(todo)">Delete</button>
+        </li>
+    }
+</ul>
+@code {
+    private List<TodoItem> todos = new();
+    private string newTodoDescription;
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodoDescription))
+        {
+            todos.Add(new TodoItem { Description = newTodoDescription, IsCompleted = false });
+            newTodoDescription = string.Empty; // Clear the input
+        }
+    }
+
+    private void RemoveTodo(TodoItem todo)
+    {
+        todos.Remove(todo);
+    }
+}
+
+
